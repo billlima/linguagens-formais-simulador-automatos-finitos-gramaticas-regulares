@@ -21,6 +21,7 @@ não terminais, terminais, regras de produção, símbolo inicial
 G = ({S, A}, {a, b, c}, P, S)
 P =
 S -> aS | bA
+S -> A
 A -> c
 ```
 

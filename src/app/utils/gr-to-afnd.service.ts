@@ -13,7 +13,7 @@ export class GrToAfndService {
    * @param naoTerminais array com os não terminais
    * @param producoes array de maps com as produções de cada terminal. Ex.: S: [aS, bA]
    */
-  converter(terminais: string[], naoTerminais: String[], producoes: any) {
-    
+  converter(terminais: String[], naoTerminais: String[], simboloInicial: String, producoes: any) {
+
   }
 }
