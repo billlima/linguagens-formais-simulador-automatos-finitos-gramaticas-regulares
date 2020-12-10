@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import { GrToAfndService } from './utils/gr-to-afnd.service';
 
 @Component({
   selector: 'app-root',
@@ -7,4 +8,10 @@ import { Component } from '@angular/core';
 })
 export class AppComponent {
   title = 'linguagens-formais-simulado-af-gr';
+
+  constructor(_grToAfndService: GrToAfndService) {
+
+  }
+
+  
 }

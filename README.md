@@ -16,6 +16,8 @@ Minimização AFD: https://youtu.be/ysM0Gn6Mg9E?t=5490
 
 ## Exemplo de Entrada
 ```
+não terminais, terminais, regras de produção, símbolo inicial
+
 G = ({S, A}, {a, b, c}, P, S)
 P =
 S -> aS | bA
