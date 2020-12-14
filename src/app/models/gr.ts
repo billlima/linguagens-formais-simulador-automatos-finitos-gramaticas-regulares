@@ -1,6 +1,6 @@
 import { Producao } from './producao';
 
-export class GramaticaRegular {
+export class GR {
     constructor(
         public terminais: string[],
         public naoTerminais: string[],

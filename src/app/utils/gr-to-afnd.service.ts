@@ -1,7 +1,7 @@
 import { Injectable } from '@angular/core';
-import { AutomatoFinito } from '../models/automato-finito';
+import { AFND } from '../models/afnd';
 import { EstadoAF } from '../models/estado-af';
-import { GramaticaRegular } from '../models/gramatica-regular';
+import { GR } from '../models/gr';
 import { Producao } from '../models/producao';
 import { UtilsService } from './utils.service';
 
@@ -10,24 +10,34 @@ import { UtilsService } from './utils.service';
 })
 export class GrToAfndService {
 
-  private automatoFinito: AutomatoFinito;
+  private afnd: AFND;
 
   constructor(private utils: UtilsService) { }
 
   private iniciar() {
-    this.automatoFinito = new AutomatoFinito([], [])
+    this.afnd = new AFND([], [])
   }
 
-  converter(gr: GramaticaRegular): AutomatoFinito {
+  converter(gr: GR): AFND {
     this.iniciar();
 
     gr.naoTerminais.forEach(naoTerminal => {
       gr.terminais.forEach(terminal => {
-        this.automatoFinito.estados.push(this.buildEstadoAF(terminal, naoTerminal, gr.producoes));
+        this.afnd.estados.push(this.buildEstadoAF(terminal, naoTerminal, gr.producoes));
       });
     });
 
-    return this.automatoFinito;
+    if (this.utils.contemIgual(this.afnd.estadosFinais, "X")) {
+      this.criarEstadoX(gr);
+    }
+
+    return this.afnd;
+  }
+
+  criarEstadoX(gr: GR) {
+    gr.naoTerminais.forEach(naoTerminal => {
+      this.afnd.estados.push(new EstadoAF('X', naoTerminal, [], true));
+    });
   }
 
   /**
@@ -47,9 +57,9 @@ export class GrToAfndService {
     
     let prodPalavraVazia = this.buscarValorProducao(naoTerminal, 'e', producoes);
     if (prodPalavraVazia && prodPalavraVazia.length) {
-      this.automatoFinito.estadosFinais.push(estado.estado);
+      this.afnd.estadosFinais.push(estado.estado);
     }
-    this.automatoFinito.estadosFinais = this.utils.removerDuplicados(this.automatoFinito.estadosFinais); 
+    this.afnd.estadosFinais = this.utils.removerDuplicados(this.afnd.estadosFinais); 
 
     return estado;
   }
@@ -63,7 +73,7 @@ export class GrToAfndService {
   private addVaiPara(estado: EstadoAF, valor: string) {
     if (valor.length == 1) {
       estado.vaiPara.push("X");
-      this.automatoFinito.estadosFinais.push("X");
+      this.afnd.estadosFinais.push("X");
     } else {
       estado.vaiPara.push(valor.charAt(1));
     }

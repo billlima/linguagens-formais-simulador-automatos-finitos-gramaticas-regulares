@@ -10,7 +10,7 @@ Validação Gramática Regular: https://youtu.be/fF56ue_SSjU?t=138
 
 Gerando AFND à partir de um Gramática Regular: https://youtu.be/ysM0Gn6Mg9E?t=4185
 
-Conversão AFND para AFD: https://youtu.be/fF56ue_SSjU?t=256
+Conversão AFND para AFD: https://youtu.be/E0VYuz7TNXg?t=965
 
 Minimização AFD: https://youtu.be/ysM0Gn6Mg9E?t=5490
 
