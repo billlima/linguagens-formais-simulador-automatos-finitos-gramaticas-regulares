@@ -23,14 +23,14 @@ export class UtilsService {
     return new GR(['a','b','c'], ['S','A'], 'S', [
       new Producao('S', ['aS', 'bA']),
       new Producao('A', ['c'])
-    ]);
+    ], 'P');
   }
 
   getGrEx2() {
     return new GR(['0', '1'], ['S','B'], 'S', [
       new Producao('S', ['0B']),
       new Producao('B', ['0B', '1S', '0'])
-    ]);
+    ], 'P');
   }
 
   getGrEx3() {
@@ -38,6 +38,6 @@ export class UtilsService {
       new Producao('S', ['aA', 'bB', 'e']),
       new Producao('A', ['aA', 'bB']),
       new Producao('B', ['bB', 'b'])      
-    ]);
+    ], 'P');
   }
 }

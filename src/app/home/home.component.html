@@ -1,6 +1,24 @@
-<div class="col-6">
-    <div class="form-group">
-        <label for="">Informe a Gramática Regular:</label>
-        <textarea class="form-control" name="gramatica" [(ngModel)]="gramatica" rows="6">{{gramatica}}</textarea>
+<div class="container">
+    <div class="row">
+        <div class="col-6">
+            <form [formGroup]="form" novalidate>
+                <div class="row">
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label for="">Informe a Gramática Regular:</label>
+                            <textarea class="form-control" name="gramatica" formControlName="gramatica"
+                                rows="6"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-12">
+                        <button class="btn btn-primary" (click)="validarEntrada()">
+                            Executar
+                        </button>
+                    </div>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
