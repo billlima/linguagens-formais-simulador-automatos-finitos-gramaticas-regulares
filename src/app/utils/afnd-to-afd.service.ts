@@ -36,7 +36,7 @@ export class AfndToAfdService {
   // Tabela AFND ------------
 
   gerarTabelaTransicaoAFND(): TransicaoAF[] {
-    let tabelaTransicaoAFND: TransicaoAF[] = this.getEstadosAFND().map((e) => new TransicaoAF(e, [], false, false));
+    let tabelaTransicaoAFND: TransicaoAF[] = this.getEstadosAFND().map((e) => new TransicaoAF(e, [], false, false, false));
 
     tabelaTransicaoAFND.forEach((transicaoAF: TransicaoAF) => {
       transicaoAF.estadoInicial = transicaoAF.estado == this.gr.simboloInicial;
@@ -63,14 +63,17 @@ export class AfndToAfdService {
     if (primeiraTransicaoND) {
       this.estadosAux = [primeiraTransicaoND.estado];  
     } else {
+      console.log('Tabela AFND não possui transição não determinística, transições copiadas para tabela AFD');      
       alert('Tabela AFND não possui transição não determinística, transições copiadas para tabela AFD');
       return this.tabelaAFD = this.tabelaAFND;
     }
     
     this.estadosAux = [primeiraTransicaoND ? primeiraTransicaoND.estado : this.tabelaAFND[0].estado];
     
-    this.tabelaAFD = []
-    return this.adicionarTransicoesAfd();    
+    this.tabelaAFD = [];
+    this.adicionarTransicoesAfd();    
+    this.copiarTransicoesAfndNaoUtilizadas();
+    return this.tabelaAFND;
   }  
 
   buscarPrimeiroEstadoNaoDeterministico(): TransicaoAF {
@@ -95,15 +98,19 @@ export class AfndToAfdService {
   criarTransicaoAfd = (estado: string) => new TransicaoAF(
       estado, 
       this.getTransicoesAfd(estado),
-      this.verificarEstadoInicial(),
-      this.verificarEstadoFinal(estado) 
+      this.verificarEstadoInicial(estado),
+      this.verificarEstadoFinal(estado),
+      false
   );
 
   getTransicoesAfd(estado: string): any[] {
     return this.gr.terminais.map((_terminal: string, index: number) => {
       let t = estado
         .split(".")
-        .map((estado: string) => this.buscarTransicaoAf(this.tabelaAFND, estado)[0].transicoes[index].join("."))
+        .map((estado: string) => {
+          this.marcarUtilizacaoTabelaAfnd(estado);
+          return this.buscarTransicaoAf(this.tabelaAFND, estado)[0].transicoes[index].join(".");
+        })
         .filter(item => item)
         .join('.');
         
@@ -116,19 +123,36 @@ export class AfndToAfdService {
     });
   }
 
-  verificarEstadoInicial(): boolean {
-    return !this.tabelaAFND.length;
+  verificarEstadoInicial(estado: string): boolean {
+    return this.tabelaAFND
+      .filter((t: TransicaoAF) => t.estado == estado && t.estadoInicial)
+      .length > 0;
   }
 
   verificarEstadoFinal(estado: string): boolean {
-    return estado.split(".")
-      .map((e: string) => this.tabelaAFND.filter((t: TransicaoAF) => t.estado == e).length)
-      .length > 0;
+    let estadoFinal = false;
+    estado.split(".")
+      .forEach((e: string) => {
+        if (this.tabelaAFND.filter((t: TransicaoAF) => t.estado == e && t.estadoFinal).length) {
+          estadoFinal = true;
+        }
+      });      
+    return estadoFinal;
   }
 
   verificarEstadoExiste = (tabela: TransicaoAF[], estado: string) => this.buscarTransicaoAf(tabela, estado).length;
 
   buscarTransicaoAf(tabela: TransicaoAF[], estado: string): TransicaoAF[] {
     return tabela.filter((transicao: TransicaoAF) => transicao.estado == estado);
+  }
+
+  marcarUtilizacaoTabelaAfnd(estado: string) {
+    this.tabelaAFND
+      .filter(item => item.estado == estado)
+      .forEach(item => item.aux = true);
+  }
+
+  copiarTransicoesAfndNaoUtilizadas() {
+    this.tabelaAFD.push(...this.tabelaAFND.filter(item => !item.aux));
   }
 }

@@ -31,8 +31,9 @@ describe('AfndToAfdService', () => {
     service.gerarTabelaTransicaoAFD()
     
     console.log('Gramática Regular', service.gr);
-    console.log('Tabela AFND', service.tabelaAFND);
-    console.log('Tabela AFD', service.tabelaAFD);
+    console.log('AFND', afnd);
+    console.table(service.tabelaAFND);
+    console.table(service.tabelaAFD);
 
     expect(service.tabelaAFD && service.tabelaAFND).toBeTruthy();
   });

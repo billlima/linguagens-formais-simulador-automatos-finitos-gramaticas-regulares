@@ -3,6 +3,7 @@ export class TransicaoAF {
         public estado: string,
         public transicoes: any[],
         public estadoInicial: boolean,
-        public estadoFinal: boolean
+        public estadoFinal: boolean,
+        public aux: boolean
     ) {}
 }
