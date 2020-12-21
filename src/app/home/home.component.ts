@@ -29,7 +29,6 @@ export class HomeComponent implements OnInit {
 
 	validarEntrada() {
 		this.gramaticaFinal = this.stringToGrService.validarEntrada(this.form.get('gramatica').value);
-		console.log(this.gramaticaFinal)
 	}
 
 	gerarForm() {
