@@ -13,6 +13,8 @@ import { GRLadosValidator } from '../models/gr-lados.validator';
 })
 export class HomeComponent implements OnInit {
 
+  sentenca: string;
+
 	form: FormGroup;
 	EXP_REMOVER_ESPACO = /\ /gi;
 	EXP_BUSCAR_TERMINAIS_NAO_TERMINAIS = /\{(.*?)\},\{(.*?)\}/;

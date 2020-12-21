@@ -1,24 +1,78 @@
-<div class="container">
-    <div class="row">
-        <div class="col-6">
-            <form [formGroup]="form" novalidate>
-                <div class="row">
-                    <div class="col-12">
-                        <div class="form-group">
-                            <label for="">Informe a Gramática Regular:</label>
-                            <textarea class="form-control" name="gramatica" formControlName="gramatica"
-                                rows="6"></textarea>
-                        </div>
+<div class="card mb-4 p-4">
+    <div class="card-body">
+        <form [formGroup]="form" novalidate>
+            <div class="row">
+                <div class="col-12">
+                    <div class="form-group">
+                        <label for="">Informe a Gramática Regular:</label>
+                        <textarea class="form-control" name="gramatica" formControlName="gramatica" rows="6"></textarea>
                     </div>
                 </div>
-                <div class="row">
-                    <div class="col-12">
-                        <button class="btn btn-primary" (click)="validarEntrada()">
-                            Executar
-                        </button>
-                    </div>
+            </div>
+            <div class="row">
+                <div class="col-12">
+                    <button class="btn btn-primary" (click)="validarEntrada()">
+                        Converter
+                    </button>
                 </div>
-            </form>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-6">
+                <h3>Tabela Transições AFND</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Estado</th>
+                            <th *ngFor="let t of gramaticaFinal.terminais">{{t}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+            <div class="col-6">
+                <h3>Tabela Transições AFD</h3>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th></th>
+                            <th>Estado</th>
+                            <th *ngFor="let t of gramaticaFinal.terminais">{{t}}</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+    <div class="card-body">
+        <h3>Autômato</h3>
+    </div>
+</div>
+
+<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+    <div class="card-body">
+        <h3>Simulador</h3>
+
+        <label for="">Informe a Sentença:</label>
+        <div class="input-group mb-3">
+            <input type="text" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
+            <div class="input-group-append">
+                <button class="btn btn-primary" type="button" (click)="gerarSentenca()">Gerar Automaticamente</button>
+            </div>
         </div>
     </div>
 </div>
