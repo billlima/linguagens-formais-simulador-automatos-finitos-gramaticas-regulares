@@ -22,7 +22,6 @@ export class GR {
         let grValidator = new GRValidator(true, []);
 
         if (this.terminais.filter(v => v.includes(this.VAZIO)).length >= 1) {
-            console.log(this.terminais);
             grValidator.mensagens.push("Possui o elemento vazio nos terminais.");
             grValidator.valido = false;
             return grValidator;
