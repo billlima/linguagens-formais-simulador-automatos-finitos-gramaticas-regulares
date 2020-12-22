@@ -52,9 +52,10 @@ export class HomeComponent implements OnInit {
 		this.tabelaAFND = tabelas[0];
 		this.tabelaAFD = tabelas[1];	
 		
-		console.log('this.afnd', this.afnd);		
-		console.log('this.tabelaAFND', this.tabelaAFND);
-		console.log('this.tabelaAFD', this.tabelaAFD);
+		console.log('GRAMATICAFINAL', this.gramaticaFinal);		
+		console.log('AFND', this.afnd);		
+		console.log('TABELAAFND', this.tabelaAFND);
+		console.log('TABELAAFD', this.tabelaAFD);
 		
 	}
 
