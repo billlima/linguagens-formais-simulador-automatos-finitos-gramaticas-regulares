@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { ToastrService } from 'ngx-toastr';
 import { AFND } from '../models/afnd';
 import { EstadoAF } from '../models/estado-af';
 import { GR } from '../models/gr';
@@ -18,19 +19,20 @@ export class AfndToAfdService {
 
   private estadosAux: string[];
 
-  constructor(private utils: UtilsService) { }
+  constructor(private utils: UtilsService, private toastr: ToastrService) { }
 
   iniciar(gr: GR, afnd: AFND) {
     this.gr = gr;
     this.afnd = afnd;
   }
 
-  converter(gr: GR, afnd: AFND) {
+  converter(gr: GR, afnd: AFND): TransicaoAF[][] {
     this.iniciar(gr, afnd);
 
     this.gerarTabelaTransicaoAFND();
     this.gerarTabelaTransicaoAFD();
-    
+
+    return [this.tabelaAFND, this.tabelaAFD];    
   }
 
   // Tabela AFND ------------
@@ -63,8 +65,7 @@ export class AfndToAfdService {
     if (primeiraTransicaoND) {
       this.estadosAux = [primeiraTransicaoND.estado];  
     } else {
-      console.log('Tabela AFND não possui transição não determinística, transições copiadas para tabela AFD');      
-      alert('Tabela AFND não possui transição não determinística, transições copiadas para tabela AFD');
+      this.toastr.info('Tabela AFND não possui transição ND, tabela AFND tabela AFD');      
       return this.tabelaAFD = this.tabelaAFND;
     }
     

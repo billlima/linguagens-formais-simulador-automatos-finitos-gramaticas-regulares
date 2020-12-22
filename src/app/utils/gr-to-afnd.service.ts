@@ -36,7 +36,7 @@ export class GrToAfndService {
 
   criarEstadoX(gr: GR) {
     gr.naoTerminais.forEach(naoTerminal => {
-      this.afnd.estados.push(new EstadoAF('X', naoTerminal, [], true));
+      this.afnd.estados.push(new EstadoAF('X', naoTerminal, [], true, ''));
     });
   }
 
@@ -48,7 +48,7 @@ export class GrToAfndService {
    * @param producoes 
    */
   private buildEstadoAF(terminal: string, naoTerminal: string, producoes: Producao[]): EstadoAF {
-    let estado: EstadoAF = new EstadoAF(naoTerminal, terminal, [], false);
+    let estado: EstadoAF = new EstadoAF(naoTerminal, terminal, [], false, '');
 
     let valorProducao: string[] = this.buscarValorProducao(naoTerminal, terminal, producoes);    
     if (valorProducao != null) {

@@ -2,21 +2,39 @@
     <div class="card-body">
         <form [formGroup]="form" novalidate>
             <div class="row">
-                <div class="col-12">
+                <div class="col-8">
                     <div class="form-group">
                         <label for="">Informe a Gramática Regular:</label>
                         <textarea class="form-control" name="gramatica" formControlName="gramatica" rows="6"></textarea>
                     </div>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col-12">
-                    <button class="btn btn-primary" (click)="validarEntrada()">
+                    <button class="btn btn-primary" (click)="converter()">
                         Converter
                     </button>
                 </div>
+
+                <div class="col-4 pt-5">
+                    <button class="btn btn-info btn-block" (click)="setEx1()">
+                        Exemplo1
+                    </button>
+                    <button class="btn btn-info btn-block" (click)="setEx2()">
+                        Exemplo2
+                    </button>
+                    <button class="btn btn-info btn-block" (click)="setEx3()">
+                        Exemplo3
+                    </button>
+                </div>
             </div>
+
         </form>
+    </div>
+</div>
+
+<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+    <div class="card-body">
+        <h5 class="card-title">AFND</h5>
+        <div *ngFor="let estado of afnd.estados">
+            {{"&delta;\{" + estado.estado + "," + estado.lendo + "\} ="}} {{estado.vaiPara && estado.vaiPara.length ? estado.vaiPara.join(",") : "&#8709;"}}
+        </div>
     </div>
 </div>
 
@@ -24,32 +42,50 @@
     <div class="card-body">
         <div class="row">
             <div class="col-6">
-                <h3>Tabela Transições AFND</h3>
-                <table class="table">
+                <h5 class="card-title">Tabela Transições AFND</h5>
+                <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
                             <th></th>
                             <th>Estado</th>
-                            <th *ngFor="let t of gramaticaFinal.terminais">{{t}}</th>
+                            <th *ngFor="let terminal of gramaticaFinal.terminais">{{terminal}}</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr *ngFor="let linha of tabelaAFND">
+                            <td>
+                                <i *ngIf="linha.estadoInicial" class="fa fa-asterisk"></i>
+                                <i *ngIf="linha.estadoFinal" class="fa fa-arrow-right"></i>
+                            </td>
+                            <td>{{linha.estado}}</td>
+                            <td *ngFor="let x of [].constructor(gramaticaFinal.terminais.length); let i = index">
+                                {{linha.transicoes[i] != null && linha.transicoes[i].length ? linha.transicoes[i] : '-'}}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
             <div class="col-6">
-                <h3>Tabela Transições AFD</h3>
-                <table class="table">
+                <h5 class="card-title">Tabela Transições AFD</h5>
+                <table class="table table-striped table-condensed">
                     <thead>
                         <tr>
                             <th></th>
                             <th>Estado</th>
-                            <th *ngFor="let t of gramaticaFinal.terminais">{{t}}</th>
+                            <th *ngFor="let terminal of gramaticaFinal.terminais">{{terminal}}</th>
                         </tr>
                     </thead>
                     <tbody>
-
+                        <tr *ngFor="let linha of tabelaAFD">
+                            <td>
+                                <i *ngIf="linha.estadoInicial" class="fa fa-asterisk"></i>
+                                <i *ngIf="linha.estadoFinal" class="fa fa-arrow-right"></i>
+                            </td>
+                            <td>{{linha.estado}}</td>
+                            <td *ngFor="let x of [].constructor(gramaticaFinal.terminais.length); let i = index">
+                                {{linha.transicoes[i] != null && linha.transicoes[i].length ? linha.transicoes[i] : '-'}}
+                            </td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -59,20 +95,55 @@
 
 <div class="card mb-4 p-4" *ngIf="gramaticaFinal">
     <div class="card-body">
-        <h3>Autômato</h3>
+        <h5 class="card-title">Autômato</h5>
     </div>
 </div>
 
-<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+<div class="card mb-4 p-4" *ngIf="simulador">
     <div class="card-body">
-        <h3>Simulador</h3>
-
-        <label for="">Informe a Sentença:</label>
-        <div class="input-group mb-3">
-            <input type="text" class="form-control" aria-label="Recipient's username" aria-describedby="basic-addon2">
-            <div class="input-group-append">
-                <button class="btn btn-primary" type="button" (click)="gerarSentenca()">Gerar Automaticamente</button>
+        <h5 class="card-title">Simulador</h5>
+        <div class="row">
+            <div class="col-12">
+                <label for="">Informe a Sentença:</label>
+                <div class="input-group mb-3">
+                    <input type="text" class="form-control" [(ngModel)]="sentenca">
+                    <div class="input-group-append">
+                        <button class="btn btn-primary" type="button" (click)="gerarSentenca()">Gerar Automaticamente</button>
+                    </div>
+                </div>
             </div>
         </div>
+
+        <div class="row">
+            <div class="col-12">
+                <button class="btn btn-primary" (click)="simular()">
+                    Simular
+                </button>
+            </div>
+        </div>
+
+        <div class="row pt-4" *ngFor="let s of simulador">
+            <table class="table table-striped table-simulador">
+                <thead>
+                    <tr>
+                        <th>Estado Atual</th>
+                        <th>Lendo</th>
+                        <th>Vai Para</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let etapa of s.etapas">
+                        <td>{{etapa.estadoAtual}}</td>
+                        <td>{{etapa.lendo}}</td>
+                        <td>{{etapa.vaiPara}}</td>
+                    </tr>
+                    <tr>
+                        <td class="td-reconheceu" *ngIf="s.reconheceu" colspan="3"><i class="fa fa-check"></i> Reconheceu!</td>
+                        <td class="td-nao-reconheceu" *ngIf="!s.reconheceu" colspan="3"><i class="fa fa-times"></i> Não Reconheceu!</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
     </div>
 </div>

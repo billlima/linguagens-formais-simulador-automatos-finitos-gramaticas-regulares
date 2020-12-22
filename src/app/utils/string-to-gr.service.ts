@@ -19,8 +19,7 @@ export class StringToGrService {
     retornoValidacaoDasRegras: GRLadosValidator;
     gramaticaFinal: GR;
 
-    constructor(private utils: UtilsService,
-        private toastr: ToastrService) { }
+    constructor(private toastr: ToastrService) { }
 
     buscarPrimeiraLinha(entrada: string[]): string {
         return entrada[0];
@@ -134,7 +133,6 @@ export class StringToGrService {
             this.retornoValidacaoDasRegras = objeto.validarRegrasDeProducao();
 
             if (this.retornoValidacaoDasRegras.direito.valido && this.retornoValidacaoDasRegras.esquerdo.valido) {
-                this.toastr.success("Entrada válida.");
                 return this.gramaticaFinal;
             } else {
                 
