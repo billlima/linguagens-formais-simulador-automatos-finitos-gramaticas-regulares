@@ -54,8 +54,8 @@
                     <tbody>
                         <tr *ngFor="let linha of tabelaAFND">
                             <td>
-                                <i *ngIf="linha.estadoInicial" class="fa fa-asterisk"></i>
-                                <i *ngIf="linha.estadoFinal" class="fa fa-arrow-right"></i>
+                                <i *ngIf="linha.estadoInicial" class="fa fa-arrow-right"></i>
+                                <i *ngIf="linha.estadoFinal" class="fa fa-asterisk"></i>
                             </td>
                             <td>{{linha.estado}}</td>
                             <td *ngFor="let x of [].constructor(gramaticaFinal.terminais.length); let i = index">
@@ -78,8 +78,8 @@
                     <tbody>
                         <tr *ngFor="let linha of tabelaAFD">
                             <td>
-                                <i *ngIf="linha.estadoInicial" class="fa fa-asterisk"></i>
-                                <i *ngIf="linha.estadoFinal" class="fa fa-arrow-right"></i>
+                                <i *ngIf="linha.estadoInicial" class="fa fa-arrow-right"></i>
+                                <i *ngIf="linha.estadoFinal" class="fa fa-asterisk"></i>
                             </td>
                             <td>{{linha.estado}}</td>
                             <td *ngFor="let x of [].constructor(gramaticaFinal.terminais.length); let i = index">
@@ -95,17 +95,49 @@
 
 <div class="card mb-4 p-4" [hidden]="!gramaticaFinal">
     <div class="card-body">
-        <h5 class="card-title">Autômato</h5>
-
         <div class="row">
-            <div class="col-12 text-center">
-                <div #mermaidDiv></div>
+            <div class="col-8">
+                <h5 class="card-title">Autômato</h5>
+
+                <div class="row">
+                    <div class="col-12 text-center">
+                        <div #mermaidDiv></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-4">
+                <h5 class="card-title text-center">Legenda</h5>
+
+                <div class="row">
+                    <div class="col-6 pt-4 text-right">
+                        Estado Normal
+                    </div>
+                    <div class="col-6 text-left">
+                        <img src="/assets/normal.png">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 pt-3 text-right">
+                        Estado Inicial
+                    </div>
+                    <div class="col-6 text-left">
+                        <img src="/assets/inicial.png">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6 pt-3 text-right">
+                        Estado Final
+                    </div>
+                    <div class="col-6 text-left">
+                        <img src="/assets/final.png">
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
 
-<div class="card mb-4 p-4" *ngIf="simulador">
+<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
     <div class="card-body">
         <h5 class="card-title">Simulador</h5>
         <div class="row">
@@ -150,6 +182,5 @@
                 </tbody>
             </table>
         </div>
-
     </div>
 </div>

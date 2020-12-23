@@ -88,6 +88,6 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 
 	setEx1 = () => this.form.controls['gramatica'].setValue('G = ({S, A}, {a, b, c}, P, S)\nP =\nS -> aS | bA\nA -> c');
-	setEx2 = () => this.form.controls['gramatica'].setValue('G = ({S, B}, {0, 1}, P, S)\nP =\nS -> 0B\nB -> 0B | 1S | 0');
+	setEx2 = () => this.form.controls['gramatica'].setValue('G = ({S, A, B, C}, {0, 1}, P, S)\nP =\nS -> 0A | 1C\nA -> 0B\nB -> 0B | 1S | 0\nC -> 1B');
 	setEx3 = () => this.form.controls['gramatica'].setValue('G = ({S, A, B}, {a, b}, P, S)\nP =\nS -> aA | bB | e\nA -> aA | bB\nB -> bB | b');
 }
