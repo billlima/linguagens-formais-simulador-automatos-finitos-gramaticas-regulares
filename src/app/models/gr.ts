@@ -1,7 +1,7 @@
 import { Producao } from './producao';
-import { GRValidator } from './gr.validator';
+import { SituacaoRegra } from './situacao-regra';
 import { ComponentFactoryResolver } from '@angular/core';
-import { GRLadosValidator } from './gr-lados.validator';
+import { SituacaoGramatica } from './situacao-gramatica';
 
 export class GR {
     constructor(
@@ -14,17 +14,17 @@ export class GR {
 
     private VAZIO = "e";
 
-    validarRegrasDeProducao(): GRLadosValidator {
-        return new GRLadosValidator(this.validarLadoDireito(), this.validarLadoEsquerdo());
+    validarRegrasDeProducao(): SituacaoGramatica {
+        return new SituacaoGramatica(this.validarLadoDireito(), this.validarLadoEsquerdo());
     }
 
-    private validarLadoDireito(): GRValidator {
-        let grValidator = new GRValidator(true, []);
+    private validarLadoDireito(): SituacaoRegra {
+        let situacaoRegra = new SituacaoRegra(true, []);
 
         if (this.terminais.filter(v => v.includes(this.VAZIO)).length >= 1) {
-            grValidator.mensagens.push("Possui o elemento vazio nos terminais.");
-            grValidator.valido = false;
-            return grValidator;
+            situacaoRegra.mensagens.push("Possui o elemento vazio nos terminais.");
+            situacaoRegra.valido = false;
+            return situacaoRegra;
         }
 
         this.producoes.forEach(producao => {
@@ -32,10 +32,10 @@ export class GR {
                 let valores = p.split("");
 
                 if (valores.length == 1) {
-                    if (grValidator.valido && this.terminais.filter(v => v.includes(valores[0])).length != 1) {
+                    if (situacaoRegra.valido && this.terminais.filter(v => v.includes(valores[0])).length != 1) {
                         if (valores[0] != this.VAZIO) {
-                            grValidator.valido = false;
-                            grValidator.mensagens.push("LADO DIREITO: Não possui um terminal.");
+                            situacaoRegra.valido = false;
+                            situacaoRegra.mensagens.push("LADO DIREITO: Não possui um terminal.");
                         }
                     }
                 } else if (valores.length == 2) {
@@ -43,41 +43,41 @@ export class GR {
                     let possuiNaoTerminal: boolean = this.naoTerminais.filter(v => v.includes(valores[1])).length == 1;
                     let possuiVazioAcompanhado: boolean = valores.filter(v => v.includes(this.VAZIO)).length == 1;
 
-                    if (grValidator.valido && !(possuiTerminal && possuiNaoTerminal) && possuiVazioAcompanhado) {
-                        grValidator.valido = false;
-                        grValidator.mensagens.push("LADO DIREITO: Não possui um terminal seguido de um não terminal.")
+                    if (situacaoRegra.valido && !(possuiTerminal && possuiNaoTerminal) && possuiVazioAcompanhado) {
+                        situacaoRegra.valido = false;
+                        situacaoRegra.mensagens.push("LADO DIREITO: Não possui um terminal seguido de um não terminal.")
                     }
                 } else {
-                    grValidator.valido = false;
-                    grValidator.mensagens.push("LADO DIREITO: Entrada inválida.")
+                    situacaoRegra.valido = false;
+                    situacaoRegra.mensagens.push("LADO DIREITO: Entrada inválida.")
                 }
             });
 
         });
 
-        return grValidator;
+        return situacaoRegra;
     }
 
-    private validarLadoEsquerdo(): GRValidator {
+    private validarLadoEsquerdo(): SituacaoRegra {
         const NUMERO_PERMITIDO_NAO_TERMINAL: number = 1;
-        let grValidator = new GRValidator(true, []);
+        let situacaoRegra = new SituacaoRegra(true, []);
 
         this.producoes.forEach(producao => {
-            if (!grValidator.valido) {
+            if (!situacaoRegra.valido) {
                 return;
             }
 
-            if (grValidator.valido && producao.simbolo.split("").length > NUMERO_PERMITIDO_NAO_TERMINAL) {
-                grValidator.valido = false;
-                grValidator.mensagens.push("LADO ESQUERDO: Possui mais de um símbolo.");
+            if (situacaoRegra.valido && producao.simbolo.split("").length > NUMERO_PERMITIDO_NAO_TERMINAL) {
+                situacaoRegra.valido = false;
+                situacaoRegra.mensagens.push("LADO ESQUERDO: Possui mais de um símbolo.");
             }
 
-            if (grValidator.valido && this.naoTerminais.filter(v => v.includes(producao.simbolo)).length != NUMERO_PERMITIDO_NAO_TERMINAL) {
-                grValidator.valido = false;
-                grValidator.mensagens.push("LADO ESQUERDO: Não possui um valor não terminal.");
+            if (situacaoRegra.valido && this.naoTerminais.filter(v => v.includes(producao.simbolo)).length != NUMERO_PERMITIDO_NAO_TERMINAL) {
+                situacaoRegra.valido = false;
+                situacaoRegra.mensagens.push("LADO ESQUERDO: Não possui um valor não terminal.");
             }
         });
 
-        return grValidator;
+        return situacaoRegra;
     }
 }

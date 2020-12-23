@@ -93,9 +93,15 @@
     </div>
 </div>
 
-<div class="card mb-4 p-4" *ngIf="gramaticaFinal">
+<div class="card mb-4 p-4" [hidden]="!gramaticaFinal">
     <div class="card-body">
         <h5 class="card-title">Autômato</h5>
+
+        <div class="row">
+            <div class="col-12 text-center">
+                <div #mermaidDiv></div>
+            </div>
+        </div>
     </div>
 </div>
 
