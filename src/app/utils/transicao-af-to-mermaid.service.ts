@@ -22,9 +22,10 @@ export class TransicaoAFtoMermaidService {
         transicoes.forEach((transicao, indice) => {
             if (transicao != null && transicao.length > 0) {
                 mermaid.estados.push(new MermaidEstado(value.estado, gramaticaFinal.terminais[indice], transicao));
-                if (value.estadoInicial) mermaid.adicionarEstiloEstadoInicial(value.estado);
-                if (value.estadoFinal) mermaid.adicionarEstiloEstadoFinal(value.estado);
             }
+
+            if (value.estadoInicial) mermaid.adicionarEstiloEstadoInicial(value.estado);
+            if (value.estadoFinal) mermaid.adicionarEstiloEstadoFinal(value.estado);
         });
     });
 

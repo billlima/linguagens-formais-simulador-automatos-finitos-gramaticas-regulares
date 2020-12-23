@@ -6,7 +6,6 @@ import { StringToGrService } from '../utils/string-to-gr.service';
 import { AFND } from '../models/afnd';
 import { AfndToAfdService } from '../utils/afnd-to-afd.service';
 import { TransicaoAF } from '../models/transicao-af';
-import { Mermaid } from '../models/mermaid';
 import { Simulador } from '../models/simulador';
 import { GeradorSentencaService } from '../utils/gerador-sentenca.service';
 import { SimuladorService } from '../utils/simulador.service';
@@ -64,6 +63,7 @@ export class HomeComponent implements OnInit, AfterViewInit {
 	}
 
 	gerarAutomato() {
+		console.log(this.tabelaAFD);
 		this.element = this.mermaidDiv.nativeElement;
 		let sintaxeMermaid = this.transicaoAFtoMermaidService.converter(this.tabelaAFD, this.gramaticaFinal).toString();
 		mermaid.render("graphDiv", sintaxeMermaid,
