@@ -69,7 +69,7 @@ export class AfndToAfdService {
       return this.tabelaAFD = this.tabelaAFND;
     }
     
-    this.estadosAux = [primeiraTransicaoND ? primeiraTransicaoND.estado : this.tabelaAFND[0].estado];
+    this.estadosAux = [primeiraTransicaoND.estado];
     
     this.tabelaAFD = [];
     this.adicionarTransicoesAfd();    
@@ -77,12 +77,12 @@ export class AfndToAfdService {
     return this.tabelaAFND;
   }  
 
-  buscarPrimeiroEstadoNaoDeterministico(): TransicaoAF {
+  private buscarPrimeiroEstadoNaoDeterministico(): TransicaoAF {
     let transicoesNaoDeterministicas = this.tabelaAFND.filter((transicao: TransicaoAF) => transicao.transicoes.filter((t: any[]) => t.length > 1).length);
     return transicoesNaoDeterministicas.length ? transicoesNaoDeterministicas[0] : null;
   }
 
-  adicionarTransicoesAfd() {
+  private adicionarTransicoesAfd() {
     while(this.estadosAux.length && this.verificarEstadoExiste(this.tabelaAFD, this.estadosAux[0])) {
       this.estadosAux.shift();
     }
@@ -96,7 +96,7 @@ export class AfndToAfdService {
     return this.adicionarTransicoesAfd();
   }
 
-  criarTransicaoAfd = (estado: string) => new TransicaoAF(
+  private criarTransicaoAfd = (estado: string) => new TransicaoAF(
       estado, 
       this.getTransicoesAfd(estado),
       this.verificarEstadoInicial(estado),
@@ -104,7 +104,7 @@ export class AfndToAfdService {
       false
   );
 
-  getTransicoesAfd(estado: string): any[] {
+  private getTransicoesAfd(estado: string): any[] {
     return this.gr.terminais.map((_terminal: string, index: number) => {
       let t = estado
         .split(".")
@@ -124,13 +124,13 @@ export class AfndToAfdService {
     });
   }
 
-  verificarEstadoInicial(estado: string): boolean {
+  private verificarEstadoInicial(estado: string): boolean {
     return this.tabelaAFND
       .filter((t: TransicaoAF) => t.estado == estado && t.estadoInicial)
       .length > 0;
   }
 
-  verificarEstadoFinal(estado: string): boolean {
+  private verificarEstadoFinal(estado: string): boolean {
     let estadoFinal = false;
     estado.split(".")
       .forEach((e: string) => {
@@ -141,19 +141,19 @@ export class AfndToAfdService {
     return estadoFinal;
   }
 
-  verificarEstadoExiste = (tabela: TransicaoAF[], estado: string) => this.buscarTransicaoAf(tabela, estado).length;
+  private verificarEstadoExiste = (tabela: TransicaoAF[], estado: string) => this.buscarTransicaoAf(tabela, estado).length;
 
-  buscarTransicaoAf(tabela: TransicaoAF[], estado: string): TransicaoAF[] {
+  private buscarTransicaoAf(tabela: TransicaoAF[], estado: string): TransicaoAF[] {
     return tabela.filter((transicao: TransicaoAF) => transicao.estado == estado);
   }
 
-  marcarUtilizacaoTabelaAfnd(estado: string) {
+  private marcarUtilizacaoTabelaAfnd(estado: string) {
     this.tabelaAFND
       .filter(item => item.estado == estado)
-      .forEach(item => item.aux = true);
+      .forEach(item => item.visitado = true);
   }
 
-  copiarTransicoesAfndNaoUtilizadas() {
-    this.tabelaAFD.push(...this.tabelaAFND.filter(item => !item.aux));
+  private copiarTransicoesAfndNaoUtilizadas() {
+    this.tabelaAFD.push(...this.tabelaAFND.filter(item => !item.visitado));
   }
 }

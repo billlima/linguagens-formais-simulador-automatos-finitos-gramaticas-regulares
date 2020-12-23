@@ -9,7 +9,7 @@ import { UtilsService } from './utils.service';
 @Injectable({
   providedIn: 'root'
 })
-export class ReconhecimentoService {
+export class SimuladorService {
   
   gr: GR;
   tabela: TransicaoAF[];
@@ -17,7 +17,7 @@ export class ReconhecimentoService {
   
   constructor(private utils: UtilsService, private toastr: ToastrService) { }
   
-  iniciar(gr: GR, tabela: TransicaoAF[]) {
+  private iniciar(gr: GR, tabela: TransicaoAF[]) {
     this.gr = gr;
     this.tabela = tabela;
     this.simulador = [];
@@ -42,41 +42,53 @@ export class ReconhecimentoService {
     }
   }
 
-  buscarEstadosIniciais() {
+  private buscarEstadosIniciais() {
     return this.tabela.filter((t: TransicaoAF) => t.estadoInicial);
   }
 
-  reconhecer(t: TransicaoAF, idx: number, sentenca: string) {
-    if (this.verificarReconhecimento(t, sentenca)) {
-      this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, '','',''));
-      this.toastr.success("Reconheceu!");
-      this.simulador[idx].reconheceu = true;
+  private reconhecer(t: TransicaoAF, idx: number, sentenca: string) {
+    if (this.verificarReconhecimento(t, idx, sentenca)) {
       return;
     }
 
     let lendo = sentenca.charAt(0);
 
-    let proximoEstado: TransicaoAF = this.getProximoEstado(t, lendo);
+    let proximoEstado: TransicaoAF = this.getProximoEstado(t, idx, lendo);
     if (!proximoEstado) {
-      this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, lendo, '-', '-'));
-      this.toastr.error("Não reconheceu!");
       return;
     }
 
-    this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, lendo, '-', proximoEstado.estado));    
+    this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, lendo, proximoEstado.estado));    
     sentenca = sentenca.substring(1);
     return this.reconhecer(proximoEstado, idx, sentenca);
   }
 
-  verificarReconhecimento = (t: TransicaoAF, sentenca: string) => !sentenca.length && t.estadoFinal;
+  private verificarReconhecimento(t: TransicaoAF, idx: number, sentenca: string) {
+    if (!sentenca.length && t.estadoFinal) {
+      this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, '',''));
+      this.toastr.success("Reconheceu!");
+      this.simulador[idx].reconheceu = true;
 
-  getProximoEstado(t: TransicaoAF, lendo: string) {
+      return true;
+    }
+    return false;
+  }
+
+  private getProximoEstado(t: TransicaoAF, idx: number, lendo: string) {
     let idxSimbolo = this.gr.terminais.findIndex((item) => item == lendo);
     let proximoEstado = t.transicoes[idxSimbolo];
-    return !proximoEstado ? null : this.tabela.filter((t: TransicaoAF) => t.estado == proximoEstado)[0];
+
+    proximoEstado = !proximoEstado ? null : this.tabela.filter((t: TransicaoAF) => t.estado == proximoEstado)[0];
+
+    if (!proximoEstado) {
+      this.simulador[idx].etapas.push(new EtapaSimulador(t.estado, lendo, '-'));
+      this.toastr.error("Não reconheceu!");
+    }
+
+    return proximoEstado;
   }
   
-  validarSentenca(sentenca: string) {
+  private validarSentenca(sentenca: string) {
     for (let x=0; x<sentenca.length; x++) {
       let char = sentenca.charAt(x);
       if (!this.utils.contemIgual(this.gr.terminais, char)) {

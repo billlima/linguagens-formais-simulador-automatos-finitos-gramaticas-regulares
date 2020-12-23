@@ -7,8 +7,8 @@ import { AFND } from '../models/afnd';
 import { AfndToAfdService } from '../utils/afnd-to-afd.service';
 import { TransicaoAF } from '../models/transicao-af';
 import { Simulador } from '../models/simulador';
-import { ReconhecimentoService } from '../utils/reconhecimento.service';
 import { GeradorSentencaService } from '../utils/gerador-sentenca.service';
+import { SimuladorService } from '../utils/simulador.service';
 
 @Component({
 	selector: 'app-home',
@@ -30,7 +30,7 @@ export class HomeComponent implements OnInit {
 		private grToAfndService: GrToAfndService,
 		private stringToGrService: StringToGrService,	
 		private afndToAfdService: AfndToAfdService,
-		private reconhecimentoService: ReconhecimentoService,
+		private simuladorService: SimuladorService,
 		private geradorSentencaService: GeradorSentencaService,
 		private fb: FormBuilder) { }
 
@@ -70,7 +70,7 @@ export class HomeComponent implements OnInit {
 	}
 
 	simular() {
-		this.simulador = this.reconhecimentoService.simular(this.gramaticaFinal, this.tabelaAFD, this.sentenca);
+		this.simulador = this.simuladorService.simular(this.gramaticaFinal, this.tabelaAFD, this.sentenca);
 		console.log('this.simulador', this.simulador);		
 	}
 

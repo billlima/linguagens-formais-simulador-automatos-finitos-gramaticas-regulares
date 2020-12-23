@@ -4,6 +4,5 @@ export class EstadoAF {
         public lendo: string,
         public vaiPara: string[],
         public estadoFinal: boolean,
-        public texto: string
     ) {}
 }

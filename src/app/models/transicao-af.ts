@@ -4,6 +4,6 @@ export class TransicaoAF {
         public transicoes: any[],
         public estadoInicial: boolean,
         public estadoFinal: boolean,
-        public aux: boolean
+        public visitado: boolean
     ) {}
 }
