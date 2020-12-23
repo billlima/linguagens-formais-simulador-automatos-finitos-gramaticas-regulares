@@ -7,7 +7,7 @@ export class Mermaid {
     public estilos: string[];
 
     ESTILO_ESTADO_FINAL = "style <ELEMENTO> stroke:#333,stroke-width:4px"
-    ESTILO_ESTADO_INICIAL = "style <ELEMENTO> fill:#ccc"
+    ESTILO_ESTADO_INICIAL = "style <ELEMENTO> fill:#b8d4a8"
     ESPACO = " ";
     QUEBRA_LINHA = "\n";
     ATRIBUI = "--> ";
